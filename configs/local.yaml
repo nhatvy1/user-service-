@@ -1,0 +1,24 @@
+server:
+  name: user-service
+  port: 5000
+database:
+  host: localhost
+  port: 5434
+  user: postgres
+  password: 123456
+  dbname: userdb
+  max_idle_conns: 10
+  max_open_conns: 20
+  conn_max_lifetime: 30
+redis:
+  host: localhost
+  port: 6379
+  password: "Gofiber"
+  db: 0
+logger:
+  log_level: debug
+  file_log_name: app.log
+  max_backups: 5
+  max_age: 30
+  max_size: 100
+  compress: true
