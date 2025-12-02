@@ -1,7 +1,18 @@
 package main
 
-import "user-service/internal/initialize"
+import (
+	"context"
+	"log"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 func main() {
-	initialize.Run()
+
+	dbURL := "postgres://postgres:123456@localhost:5433/user-db?sslmode=disable"
+	pool, err := pgxpool.New(context.Background(), dbURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pool.Close()
 }
