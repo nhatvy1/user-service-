@@ -1,10 +1,11 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "sql/query.sql"
     schema: "sql/schema.sql"
+    queries:
+      - "sql/users/*.sql"
     gen:
       go:
-        package: "tutorial"
-        out: "tutorial"
+        package: "db"
+        out: "internal/db"
         sql_package: "pgx/v5"
