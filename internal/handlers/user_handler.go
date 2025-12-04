@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"user-service/internal/services"
@@ -6,17 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
+type UserHandler struct {
 	userService services.UserService
 }
 
-func NewUserController(us services.UserService) *UserController {
-	return &UserController{
+func NewUserHandler(us services.UserService) *UserHandler {
+	return &UserHandler{
 		userService: us,
 	}
 }
 
-func (c *UserController) FindUserByID(ctx *gin.Context) {
+func (c *UserHandler) FindUserByID(ctx *gin.Context) {
 	user, err := c.userService.FindUserByID(1)
 
 	if err != nil {

@@ -4,10 +4,14 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"user-service/internal/validations"
 	"user-service/pkg/globals"
 )
 
 func Run() {
+	if err := validations.InitValidator(); err != nil {
+		fmt.Printf("validations error")
+	}
 	LoadConfig()
 
 	pool, err := DbConnect()

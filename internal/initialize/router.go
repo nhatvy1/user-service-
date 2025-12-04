@@ -1,9 +1,7 @@
 package initialize
 
 import (
-	"user-service/internal/controllers"
-	"user-service/internal/routers"
-	"user-service/internal/services"
+	"user-service/internal/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,12 +9,12 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.Default()
 
-	userService := services.NewUserService()
-	userController := controllers.NewUserController(userService)
+	container := BuildContainer()
 
 	api := r.Group("/api/v1")
 
-	routers.UserRouter(api, userController)
+	routes.UserRouter(api, container.UserHandler)
+	routes.AuthRouter(api, container.AuthHandler)
 
 	return r
 }
