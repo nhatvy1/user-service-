@@ -7,11 +7,13 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const checkUserExists = `-- name: CheckUserExists :one
 SELECT EXISTS (
-  SELECT 1 FROM users WHERE EMAIL = $1
+  SELECT 1 FROM user_base WHERE EMAIL = $1
 )
 `
 
@@ -24,19 +26,19 @@ func (q *Queries) CheckUserExists(ctx context.Context, email string) (bool, erro
 
 const getUserLoginInfo = `-- name: GetUserLoginInfo :one
 SELECT id, email, password
-FROM users 
+FROM user_base 
 WHERE email = $1 and password = $2
 `
 
 type GetUserLoginInfoParams struct {
 	Email    string
-	Password string
+	Password pgtype.Text
 }
 
 type GetUserLoginInfoRow struct {
 	ID       int32
 	Email    string
-	Password string
+	Password pgtype.Text
 }
 
 func (q *Queries) GetUserLoginInfo(ctx context.Context, arg GetUserLoginInfoParams) (GetUserLoginInfoRow, error) {

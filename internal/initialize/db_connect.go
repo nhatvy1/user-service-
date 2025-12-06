@@ -3,25 +3,33 @@ package initialize
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 	"user-service/pkg/globals"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func DbConnect() (*pgxpool.Pool, error) {
-	dbConnectionStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", globals.Config.Database.User, globals.Config.Database.Password, globals.Config.Database.Host, globals.Config.Database.Port, globals.Config.Database.DbName)
+type Database struct {
+	Pool *pgxpool.Pool
+}
+
+func NewDatabase() (*Database, error) {
+	dbConnectionStr := fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s",
+		globals.Config.Database.User,
+		globals.Config.Database.Password,
+		globals.Config.Database.Host,
+		globals.Config.Database.Port,
+		globals.Config.Database.DbName,
+	)
 
 	poolCfg, err := pgxpool.ParseConfig(dbConnectionStr)
-
 	if err != nil {
-		panic("database connect failed")
+		return nil, fmt.Errorf("failed to parse config: %w", err)
 	}
 
 	poolCfg.MinConns = int32(globals.Config.Database.MaxIdle)
 	poolCfg.MaxConns = int32(globals.Config.Database.MaxOpen)
-
 	if globals.Config.Database.MaxLife > 0 {
 		poolCfg.MaxConnLifetime = time.Duration(globals.Config.Database.MaxLife) * time.Second
 	}
@@ -31,14 +39,20 @@ func DbConnect() (*pgxpool.Pool, error) {
 
 	pool, err := pgxpool.NewWithConfig(ctx, poolCfg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create pool: %w", err)
 	}
 
 	if err := pool.Ping(ctx); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	log.Printf("🚀 Successfully connected to PostgreSQL: %s:%d/%s", globals.Config.Database.Host, globals.Config.Database.Port, globals.Config.Database.DbName)
+	// log.Println("DATABASE CONNECTION ESTABLISHED")
 
-	return pool, nil
+	return &Database{Pool: pool}, nil
+}
+
+func (db *Database) Close() {
+	if db.Pool != nil {
+		db.Pool.Close()
+	}
 }

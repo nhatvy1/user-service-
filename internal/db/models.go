@@ -8,21 +8,27 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Product struct {
-	ID          int32
-	Name        string
-	Description pgtype.Text
-	Price       pgtype.Numeric
-	Stock       pgtype.Int4
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
+type User2fa struct {
+	ID        int32
+	Enabled   pgtype.Bool
+	Secret    pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
 }
 
-type User struct {
+type UserBase struct {
 	ID        int32
-	Username  string
 	Email     string
-	Password  string
+	Password  pgtype.Text
+	AuthType  int16
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
+
+type UserInfo struct {
+	ID        int32
+	Firstname pgtype.Text
+	Lastname  pgtype.Text
 	CreatedAt pgtype.Timestamptz
 	UpdatedAt pgtype.Timestamptz
 }

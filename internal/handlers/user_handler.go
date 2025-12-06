@@ -17,7 +17,7 @@ func NewUserHandler(us services.UserService) *UserHandler {
 }
 
 func (c *UserHandler) FindUserByID(ctx *gin.Context) {
-	user, err := c.userService.FindUserByID(1)
+	user, err := c.userService.FindUserByID(ctx, 1)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": "Not Found"})

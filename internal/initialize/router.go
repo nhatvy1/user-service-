@@ -1,20 +1,27 @@
 package initialize
 
 import (
-	"user-service/internal/routes"
-
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
-	r := gin.Default()
-
-	container := BuildContainer()
-
+func SetupRoutes(r *gin.Engine, container *Container) {
+	// Public routes
 	api := r.Group("/api/v1")
+	{
+		// Auth routes
+		auth := api.Group("/auth")
+		{
+			auth.POST("/login", container.AuthHandler.Login)
+		}
 
-	routes.UserRouter(api, container.UserHandler)
-	routes.AuthRouter(api, container.AuthHandler)
-
-	return r
+		// Protected routes
+		protected := api.Group("")
+		// protected.Use(middleware.AuthMiddleware())
+		{
+			users := protected.Group("/users")
+			{
+				users.GET("/:id", container.UserHandler.FindUserByID)
+			}
+		}
+	}
 }
