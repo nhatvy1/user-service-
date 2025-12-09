@@ -9,26 +9,26 @@ import (
 )
 
 type User2fa struct {
-	ID        int32
-	Enabled   pgtype.Bool
-	Secret    pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID        int32              `json:"id"`
+	Enabled   pgtype.Bool        `json:"enabled"`
+	Secret    pgtype.Text        `json:"secret"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }
 
 type UserBase struct {
-	ID        int32
-	Email     string
-	Password  pgtype.Text
-	AuthType  int16
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID        int32              `json:"id"`
+	Email     string             `json:"email"`
+	Password  pgtype.Text        `json:"password"`
+	AuthType  int16              `json:"auth_type"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }
 
 type UserInfo struct {
-	ID        int32
-	Firstname pgtype.Text
-	Lastname  pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID        int32              `json:"id"`
+	Firstname pgtype.Text        `json:"firstname"`
+	Lastname  pgtype.Text        `json:"lastname"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

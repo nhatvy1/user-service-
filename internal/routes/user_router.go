@@ -1,14 +1,21 @@
 package routes
 
 import (
-	"user-service/internal/handlers"
+	di_container "user-service/internal/di-container"
+	"user-service/internal/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
 
-func UserRouter(rg *gin.RouterGroup, uc *handlers.UserHandler) {
+func UserRouter(rg *gin.RouterGroup, c *di_container.Container) {
 	userGroup := rg.Group("/users")
 	{
-		userGroup.GET("/:id", uc.FindUserByID)
+		protected := userGroup.Group("/")
+		protected.Use(middlewares.Authentication())
+		{
+			protected.GET("/:id", c.UserHandler.FindUserByID)
+			protected.PUT("/:id", c.UserHandler.FindUserByID)
+			protected.DELETE("/:id", c.UserHandler.FindUserByID)
+		}
 	}
 }

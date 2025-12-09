@@ -16,13 +16,14 @@ func NewUserHandler(us services.UserService) *UserHandler {
 	}
 }
 
-func (c *UserHandler) FindUserByID(ctx *gin.Context) {
-	user, err := c.userService.FindUserByID(ctx, 1)
+func (uh *UserHandler) FindUserByID(c *gin.Context) {
+	ctx := c.Request.Context()
+	user, err := uh.userService.FindUserByID(ctx, 1)
 
 	if err != nil {
-		ctx.JSON(400, gin.H{"error": "Not Found"})
+		c.JSON(400, gin.H{"error": "Not Found"})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"result": user})
+	c.JSON(200, gin.H{"result": user})
 }

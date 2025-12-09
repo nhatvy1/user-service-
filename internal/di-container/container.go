@@ -1,13 +1,17 @@
-package initialize
+package di_container
 
 import (
+	"fmt"
+	"log"
+	"user-service/internal/database"
 	"user-service/internal/db"
 	"user-service/internal/handlers"
 	"user-service/internal/services"
 )
 
 type Container struct {
-	DB *Database
+	Queries *db.Queries
+	DB      *database.Database
 
 	UserService services.UserService
 	AuthService services.AuthService
@@ -16,17 +20,18 @@ type Container struct {
 	AuthHandler *handlers.AuthHandler
 }
 
-func NewContainer() (*Container, error) {
-	// Initialize database
-	database, err := NewDatabase()
+func NewContainer() *Container {
+	// 1. Initialize database
+	database, err := database.NewDatabase()
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("failed to initialize database: %v", err))
 	}
 
 	queries := db.New(database.Pool)
+	log.Println("✅ SQLC Queries initialized")
 
 	userService := services.NewUserService(queries)
-	authService := services.NewAuthService()
+	authService := services.NewAuthService(queries)
 
 	userHandler := handlers.NewUserHandler(userService)
 	authHandler := handlers.NewAuthHandler(authService)
@@ -37,11 +42,5 @@ func NewContainer() (*Container, error) {
 		AuthService: authService,
 		UserHandler: userHandler,
 		AuthHandler: authHandler,
-	}, nil
-}
-
-func (c *Container) Close() {
-	if c.DB != nil {
-		c.DB.Close()
 	}
 }

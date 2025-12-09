@@ -1,8 +1,9 @@
-package initialize
+package database
 
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 	"user-service/pkg/globals"
 
@@ -22,6 +23,8 @@ func NewDatabase() (*Database, error) {
 		globals.Config.Database.Port,
 		globals.Config.Database.DbName,
 	)
+
+	fmt.Println("dateStr: ", dbConnectionStr)
 
 	poolCfg, err := pgxpool.ParseConfig(dbConnectionStr)
 	if err != nil {
@@ -46,7 +49,7 @@ func NewDatabase() (*Database, error) {
 		return nil, fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	// log.Println("DATABASE CONNECTION ESTABLISHED")
+	log.Println("DATABASE CONNECTION ESTABLISHED")
 
 	return &Database{Pool: pool}, nil
 }

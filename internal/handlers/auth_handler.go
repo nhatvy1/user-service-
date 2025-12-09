@@ -19,17 +19,19 @@ func NewAuthHandler(as services.AuthService) *AuthHandler {
 	}
 }
 
-func (c *AuthHandler) Login(ctx *gin.Context) {
+func (ah *AuthHandler) Login(c *gin.Context) {
+	ctx := c.Request.Context()
 	var loginRequest vo.LoginRequest
-	if err := ctx.ShouldBindJSON(&loginRequest); err != nil {
-		validations.HandleValidationError(ctx, err)
-		return
-	}
-	result, err := c.authService.Login()
-	if err != nil {
-		utils.ErrorResponse(ctx, 403, "Login Failed", err)
+	if err := c.ShouldBindJSON(&loginRequest); err != nil {
+		validations.HandleValidationError(c, err)
 		return
 	}
 
-	utils.SuccessResponse(ctx, 200, "success", result)
+	result, err := ah.authService.Login(ctx, &loginRequest)
+	if err != nil {
+		utils.ErrorResponse(c, 403, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, 200, "success", result)
 }

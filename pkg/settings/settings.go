@@ -1,9 +1,10 @@
 package settings
 
 type Config struct {
-	Server   ServerSetting `mapstructure:"server"`
-	Database DbSetting     `mapstructure:"database"`
-	Redis    RedisSetting  `mapstructure:"redis"`
+	Server    ServerSetting    `mapstructure:"server"`
+	Database  DbSetting        `mapstructure:"database"`
+	Redis     RedisSetting     `mapstructure:"redis"`
+	SecretKey SecretKeySetting `mapstructure:"secret_key"`
 }
 type ServerSetting struct {
 	Name string `mapstructure:"name"`
@@ -35,4 +36,9 @@ type LogSetting struct {
 	MaxBackups int    `mapstructure:"max_backups"`
 	MaxAge     int    `mapstructure:"max_age"`
 	Compress   bool   `mapstructure:"compress"`
+}
+
+type SecretKeySetting struct {
+	AccessToken string `mapstructure:"access_token"`
+	ExpireHours uint8  `mapstructure:"access_token_expire"`
 }

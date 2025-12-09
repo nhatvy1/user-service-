@@ -7,18 +7,18 @@ import (
 type ErrCode string
 
 type AppErr struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Detail  interface{} `json:"detail,omitempty"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Detail  any    `json:"detail,omitempty"`
 }
 
 type ApiResponse struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    any    `json:"data,omitempty"`
 }
 
-func SuccessResponse(ctx *gin.Context, status int, message string, data interface{}) {
+func SuccessResponse(ctx *gin.Context, status int, message string, data any) {
 	ctx.JSON(status, ApiResponse{
 		Code:    status,
 		Message: message,
@@ -26,7 +26,7 @@ func SuccessResponse(ctx *gin.Context, status int, message string, data interfac
 	})
 }
 
-func ErrorResponse(ctx *gin.Context, status int, err string, detail interface{}) {
+func ErrorResponse(ctx *gin.Context, status int, err string, detail any) {
 	ctx.JSON(status, AppErr{
 		Code:    status,
 		Message: err,

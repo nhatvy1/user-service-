@@ -6,4 +6,4 @@ SELECT EXISTS (
 -- name: GetUserLoginInfo :one
 SELECT id, email, password
 FROM user_base 
-WHERE email = $1 and password = $2;
+WHERE email = $1;

@@ -27,22 +27,17 @@ func (q *Queries) CheckUserExists(ctx context.Context, email string) (bool, erro
 const getUserLoginInfo = `-- name: GetUserLoginInfo :one
 SELECT id, email, password
 FROM user_base 
-WHERE email = $1 and password = $2
+WHERE email = $1
 `
 
-type GetUserLoginInfoParams struct {
-	Email    string
-	Password pgtype.Text
-}
-
 type GetUserLoginInfoRow struct {
-	ID       int32
-	Email    string
-	Password pgtype.Text
+	ID       int32       `json:"id"`
+	Email    string      `json:"email"`
+	Password pgtype.Text `json:"password"`
 }
 
-func (q *Queries) GetUserLoginInfo(ctx context.Context, arg GetUserLoginInfoParams) (GetUserLoginInfoRow, error) {
-	row := q.db.QueryRow(ctx, getUserLoginInfo, arg.Email, arg.Password)
+func (q *Queries) GetUserLoginInfo(ctx context.Context, email string) (GetUserLoginInfoRow, error) {
+	row := q.db.QueryRow(ctx, getUserLoginInfo, email)
 	var i GetUserLoginInfoRow
 	err := row.Scan(&i.ID, &i.Email, &i.Password)
 	return i, err

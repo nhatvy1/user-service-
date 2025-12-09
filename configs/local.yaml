@@ -1,6 +1,6 @@
 server:
   name: user-service
-  port: 5000
+  port: 7979
 database:
   host: localhost
   port: 5433
@@ -20,5 +20,8 @@ logger:
   file_log_name: app.log
   max_backups: 5
   max_age: 30
-  max_size: 100
+  max_size: 10
   compress: true
+secret_key:
+  access_token: QFRZJz2Va2
+  access_token_expire: 24
