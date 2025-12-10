@@ -32,7 +32,7 @@ func RegisterCustomValidation(v *validator.Validate) {
 	v.RegisterValidation("password_strong", func(fl validator.FieldLevel) bool {
 		password := fl.Field().String()
 
-		if len(password) < 8 {
+		if len(password) < 6 {
 			return false
 		}
 

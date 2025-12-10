@@ -27,8 +27,8 @@ type UserBase struct {
 
 type UserInfo struct {
 	ID        int32              `json:"id"`
-	Firstname pgtype.Text        `json:"firstname"`
-	Lastname  pgtype.Text        `json:"lastname"`
+	Firstname string             `json:"firstname"`
+	Lastname  string             `json:"lastname"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

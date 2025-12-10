@@ -1,6 +1,7 @@
 package response
 
-type UserLoginResponse struct {
-	UserId      int    `json:"user_id"`
-	AccessToken string `json:"access_token"`
+type UserInfoResponse struct {
+	Email     string `json:"email"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 }

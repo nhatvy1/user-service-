@@ -10,7 +10,9 @@ import (
 
 type Querier interface {
 	CheckUserExists(ctx context.Context, email string) (bool, error)
+	FinduserInfoById(ctx context.Context, id int32) (FinduserInfoByIdRow, error)
 	GetUserLoginInfo(ctx context.Context, email string) (GetUserLoginInfoRow, error)
+	UserRegister(ctx context.Context, arg UserRegisterParams) (int32, error)
 }
 
 var _ Querier = (*Queries)(nil)

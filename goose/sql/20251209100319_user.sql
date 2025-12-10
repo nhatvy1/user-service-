@@ -17,8 +17,8 @@ CREATE TABLE
 CREATE TABLE
   user_info (
     id INT PRIMARY KEY REFERENCES user_base (id) ON DELETE CASCADE,
-    firstname VARCHAR(50),
-    lastname VARCHAR(50),
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
     created_at TIMESTAMP
     WITH
       TIME ZONE DEFAULT CURRENT_TIMESTAMP,

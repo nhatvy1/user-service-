@@ -28,10 +28,25 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 	}
 
 	result, err := ah.authService.Login(ctx, &loginRequest)
-	if err != nil {
-		utils.ErrorResponse(c, 403, err.Error(), nil)
+	if utils.HandleError(c, err) {
 		return
 	}
 
 	utils.SuccessResponse(c, 200, "success", result)
+}
+
+func (ah *AuthHandler) Register(c *gin.Context) {
+	ctx := c.Request.Context()
+	var registerRequest vo.RegisterRequest
+	if err := c.ShouldBindJSON(&registerRequest); err != nil {
+		validations.HandleValidationError(c, err)
+		return
+	}
+
+	result, err := ah.authService.Register(ctx, &registerRequest)
+	if utils.HandleError(c, err) {
+		return
+	}
+
+	utils.SuccessResponse(c, 201, "user registered successfully", result)
 }

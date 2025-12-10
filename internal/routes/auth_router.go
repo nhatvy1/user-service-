@@ -10,6 +10,6 @@ func AuthRouter(rg *gin.RouterGroup, c *di_container.Container) {
 	authGroup := rg.Group("/auth")
 	{
 		authGroup.POST("/login", c.AuthHandler.Login)
-		authGroup.POST("/register", c.AuthHandler.Login)
+		authGroup.POST("/register", c.AuthHandler.Register)
 	}
 }
