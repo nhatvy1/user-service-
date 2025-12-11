@@ -2,11 +2,11 @@ package di_container
 
 import (
 	"fmt"
-	"log"
 	"user-service/internal/database"
 	"user-service/internal/db"
 	"user-service/internal/handlers"
 	"user-service/internal/services"
+	"user-service/pkg/cache"
 )
 
 type Container struct {
@@ -28,13 +28,14 @@ func NewContainer() *Container {
 	}
 
 	queries := db.New(database.Pool)
-	log.Println("✅ SQLC Queries initialized")
+
+	redis := cache.NewRedisCache()
 
 	userService := services.NewUserService(queries)
 	authService := services.NewAuthService(queries)
 
 	userHandler := handlers.NewUserHandler(userService)
-	authHandler := handlers.NewAuthHandler(authService)
+	authHandler := handlers.NewAuthHandler(authService, redis)
 
 	return &Container{
 		DB:          database,

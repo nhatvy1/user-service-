@@ -5,17 +5,20 @@ import (
 	"user-service/internal/utils"
 	"user-service/internal/validations"
 	"user-service/internal/vo"
+	"user-service/pkg/cache"
 
 	"github.com/gin-gonic/gin"
 )
 
 type AuthHandler struct {
 	authService services.AuthService
+	cache       cache.Cache
 }
 
-func NewAuthHandler(as services.AuthService) *AuthHandler {
+func NewAuthHandler(as services.AuthService, cache cache.Cache) *AuthHandler {
 	return &AuthHandler{
 		authService: as,
+		cache:       cache,
 	}
 }
 

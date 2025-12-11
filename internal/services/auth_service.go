@@ -65,7 +65,7 @@ func (as *authService) Register(ctx context.Context, registerBody *vo.RegisterRe
 		AuthType:  0,
 		Firstname: registerBody.FirstName,
 		Lastname:  registerBody.LastName,
-		Enabled:   pgtype.Bool{Bool: false, Valid: true},
+		Enabled:   pgtype.Bool{Valid: false},
 		Secret:    pgtype.Text{String: "", Valid: false},
 	}
 
