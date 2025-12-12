@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const finduserInfoById = `-- name: FinduserInfoById :one
@@ -16,8 +18,8 @@ WHERE id = $1
 `
 
 type FinduserInfoByIdRow struct {
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
+	Firstname pgtype.Text `json:"firstname"`
+	Lastname  pgtype.Text `json:"lastname"`
 }
 
 func (q *Queries) FinduserInfoById(ctx context.Context, id int32) (FinduserInfoByIdRow, error) {

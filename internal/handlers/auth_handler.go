@@ -5,20 +5,17 @@ import (
 	"user-service/internal/utils"
 	"user-service/internal/validations"
 	"user-service/internal/vo"
-	"user-service/pkg/cache"
 
 	"github.com/gin-gonic/gin"
 )
 
 type AuthHandler struct {
 	authService services.AuthService
-	cache       cache.Cache
 }
 
-func NewAuthHandler(as services.AuthService, cache cache.Cache) *AuthHandler {
+func NewAuthHandler(as services.AuthService) *AuthHandler {
 	return &AuthHandler{
 		authService: as,
-		cache:       cache,
 	}
 }
 
@@ -51,5 +48,21 @@ func (ah *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	utils.SuccessResponse(c, 201, "user registered successfully", result)
+	utils.SuccessResponse(c, 201, "Nhập OTP để hoàn tất đăng nhập", result)
+}
+
+func (ah *AuthHandler) VerifryOTP(c *gin.Context) {
+	ctx := c.Request.Context()
+	var otpRequest vo.RegisterVerifyOTP
+	if err := c.ShouldBindJSON(&otpRequest); err != nil {
+		validations.HandleValidationError(c, err)
+		return
+	}
+
+	result, err := ah.authService.VerifyOTP(ctx, &otpRequest)
+	if utils.HandleError(c, err) {
+		return
+	}
+
+	utils.SuccessResponse(c, 200, "OTP verified successfully", result)
 }

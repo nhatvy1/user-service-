@@ -28,7 +28,7 @@ func (q *Queries) CheckUserExists(ctx context.Context, email string) (bool, erro
 }
 
 const getUserLoginInfo = `-- name: GetUserLoginInfo :one
-SELECT id, email, password
+SELECT id, email, "password", verify
 FROM user_base
 WHERE email = $1
 `
@@ -37,19 +37,36 @@ type GetUserLoginInfoRow struct {
 	ID       int32       `json:"id"`
 	Email    string      `json:"email"`
 	Password pgtype.Text `json:"password"`
+	Verify   pgtype.Bool `json:"verify"`
 }
 
 func (q *Queries) GetUserLoginInfo(ctx context.Context, email string) (GetUserLoginInfoRow, error) {
 	row := q.db.QueryRow(ctx, getUserLoginInfo, email)
 	var i GetUserLoginInfoRow
-	err := row.Scan(&i.ID, &i.Email, &i.Password)
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Password,
+		&i.Verify,
+	)
 	return i, err
+}
+
+const updateUserVerifiedStatus = `-- name: UpdateUserVerifiedStatus :exec
+UPDATE user_base
+SET verify = TRUE
+WHERE id = $1
+`
+
+func (q *Queries) UpdateUserVerifiedStatus(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, updateUserVerifiedStatus, id)
+	return err
 }
 
 const userRegister = `-- name: UserRegister :one
 WITH new_user AS (
   INSERT INTO
-    user_base (email, "password", auth_type)
+    user_base (email, "password", verify)
   VALUES
     ($1, $2, $3) RETURNING id
 ),
@@ -57,11 +74,6 @@ insert_user_info AS (
   INSERT INTO
     user_info (id, firstname, lastname)
   SELECT id, $4, $5
-  FROM new_user
-),
-insert_user_2fa AS (
-  INSERT INTO user_2fa (id, enabled, secret)
-  SELECT id, $6, $7
   FROM new_user
 )
 SELECT id
@@ -71,22 +83,18 @@ FROM new_user
 type UserRegisterParams struct {
 	Email     string      `json:"email"`
 	Password  pgtype.Text `json:"password"`
-	AuthType  int16       `json:"auth_type"`
-	Firstname string      `json:"firstname"`
-	Lastname  string      `json:"lastname"`
-	Enabled   pgtype.Bool `json:"enabled"`
-	Secret    pgtype.Text `json:"secret"`
+	Verify    pgtype.Bool `json:"verify"`
+	Firstname pgtype.Text `json:"firstname"`
+	Lastname  pgtype.Text `json:"lastname"`
 }
 
 func (q *Queries) UserRegister(ctx context.Context, arg UserRegisterParams) (int32, error) {
 	row := q.db.QueryRow(ctx, userRegister,
 		arg.Email,
 		arg.Password,
-		arg.AuthType,
+		arg.Verify,
 		arg.Firstname,
 		arg.Lastname,
-		arg.Enabled,
-		arg.Secret,
 	)
 	var id int32
 	err := row.Scan(&id)

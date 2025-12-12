@@ -11,3 +11,8 @@ type RegisterRequest struct {
 	FirstName string `json:"firstname" binding:"required,min=1,max=50"`
 	LastName  string `json:"lastname" binding:"required,min=1,max=50"`
 }
+
+type RegisterVerifyOTP struct {
+	VerificationId string `json:"verificationId" binding:"required"`
+	OTP            string `json:"otp" binding:"required,len=6"`
+}

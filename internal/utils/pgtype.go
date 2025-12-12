@@ -15,3 +15,7 @@ func OptionalText(v *string) pgtype.Text {
 	}
 	return pgtype.Text{String: *v, Valid: true}
 }
+
+func NullableBool(v *bool) pgtype.Bool {
+	return pgtype.Bool{Bool: *v, Valid: true}
+}

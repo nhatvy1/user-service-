@@ -8,6 +8,15 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type ProviderAccount struct {
+	ID             int32              `json:"id"`
+	UserID         pgtype.Int4        `json:"user_id"`
+	ProviderName   int16              `json:"provider_name"`
+	ProviderUserID string             `json:"provider_user_id"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+}
+
 type User2fa struct {
 	ID        int32              `json:"id"`
 	Enabled   pgtype.Bool        `json:"enabled"`
@@ -20,15 +29,16 @@ type UserBase struct {
 	ID        int32              `json:"id"`
 	Email     string             `json:"email"`
 	Password  pgtype.Text        `json:"password"`
-	AuthType  int16              `json:"auth_type"`
+	Verify    pgtype.Bool        `json:"verify"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }
 
 type UserInfo struct {
 	ID        int32              `json:"id"`
-	Firstname string             `json:"firstname"`
-	Lastname  string             `json:"lastname"`
+	Firstname pgtype.Text        `json:"firstname"`
+	Lastname  pgtype.Text        `json:"lastname"`
+	AvatarUrl pgtype.Text        `json:"avatar_url"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

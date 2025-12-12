@@ -11,7 +11,7 @@ import (
 )
 
 type Cache interface {
-	Get(ctx context.Context, key string, value any) error
+	Get(ctx context.Context, key string, dest any) error
 	Set(ctx context.Context, key string, value any, time time.Duration) error
 	Clear(ctx context.Context, key string) error
 }

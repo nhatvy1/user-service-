@@ -32,10 +32,10 @@ func NewContainer() *Container {
 	redis := cache.NewRedisCache()
 
 	userService := services.NewUserService(queries)
-	authService := services.NewAuthService(queries)
+	authService := services.NewAuthService(queries, redis)
 
 	userHandler := handlers.NewUserHandler(userService)
-	authHandler := handlers.NewAuthHandler(authService, redis)
+	authHandler := handlers.NewAuthHandler(authService)
 
 	return &Container{
 		DB:          database,

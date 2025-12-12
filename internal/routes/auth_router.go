@@ -11,5 +11,6 @@ func AuthRouter(rg *gin.RouterGroup, c *di_container.Container) {
 	{
 		authGroup.POST("/login", c.AuthHandler.Login)
 		authGroup.POST("/register", c.AuthHandler.Register)
+		authGroup.POST("/verify-otp", c.AuthHandler.VerifryOTP)
 	}
 }
